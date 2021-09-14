@@ -1,5 +1,5 @@
 
-# adding a comment
+# adding a comment v2
 # Define the database connection to be used for this model.
 connection: "thelook_bq"
 
