@@ -1,5 +1,5 @@
 
-# This will be the development model
+# This will be the development model - changes are made here
 # Define the database connection to be used for this model.
 connection: "thelook_bq"
 
