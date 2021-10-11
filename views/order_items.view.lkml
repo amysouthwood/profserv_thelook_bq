@@ -14,6 +14,33 @@ view: order_items {
     sql: ${TABLE}.id ;;
   }
 
+  parameter: filter_dynamic_dimension {
+    type: unquoted
+    allowed_value: {
+      value: "id"
+    }
+    allowed_value: {
+      value: "city"
+    }
+    allowed_value: {
+      value: "brand"
+    }
+  }
+
+  dimension: dynamic_dimension {
+    label_from_parameter: filter_dynamic_dimension
+    type: string
+    sql:
+    {%if filter_dynamic_dimension._parameter_value == 'id'%}
+    ${order_id}
+    {% elsif filter_dynamic_dimension._parameter_value == 'brand'%}
+    ${inventory_items.product_brand}
+    {% else %}
+    ${users.city}
+    {%endif%}
+    ;;
+  }
+
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
