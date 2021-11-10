@@ -10,7 +10,7 @@ include: "/views/**/*.view"
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: amy_s_bq_sandbox_default_datagroup {
-  sql_trigger: SELECT 1;;
+  sql_trigger: select max(created_at) from `looker-private-demo.thelook.order_items` ;;
   max_cache_age: "1 hour"
 }
 
