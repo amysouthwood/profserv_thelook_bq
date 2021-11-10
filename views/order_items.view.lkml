@@ -27,19 +27,19 @@ view: order_items {
     }
   }
 
-  dimension: dynamic_dimension {
-    label_from_parameter: filter_dynamic_dimension
-    type: string
-    sql:
-    {%if filter_dynamic_dimension._parameter_value == 'id'%}
-    ${order_id}
-    {% elsif filter_dynamic_dimension._parameter_value == 'brand'%}
-    ${inventory_items.product_brand}
-    {% else %}
-    ${users.city}
-    {%endif%}
-    ;;
-  }
+  # dimension: dynamic_dimension {
+  #   label_from_parameter: filter_dynamic_dimension
+  #   type: string
+  #   sql:
+  #   {%if filter_dynamic_dimension._parameter_value == 'id'%}
+  #   ${order_id}
+  #   {% elsif filter_dynamic_dimension._parameter_value == 'brand'%}
+  #   ${inventory_items.product_brand}
+  #   {% else %}
+  #   ${users.city}
+  #   {%endif%}
+  #   ;;
+  # }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
@@ -138,23 +138,27 @@ view: order_items {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: count {
+    hidden: yes
     type: count
     drill_fields: [detail*]
   }
 
-  # These sum and average measures are hidden by default.
-  # If you want them to show up in your explore, remove hidden: yes.
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
 
   measure: total_sale_price {
     type: sum
-    hidden: yes
     sql: ${sale_price} ;;
+    value_format_name: decimal_2
   }
 
   measure: average_sale_price {
     type: average
-    hidden: yes
     sql: ${sale_price} ;;
+    value_format_name: decimal_2
   }
 
   # ----- Sets of fields for drilling ------

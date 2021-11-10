@@ -10,22 +10,12 @@ include: "/views/**/*.view"
 # use the Quick Help panel on the right to see documentation.
 
 datagroup: amy_s_bq_sandbox_default_datagroup {
-  # sql_trigger: SELECT MAX(id) FROM etl_log;;
+  sql_trigger: SELECT 1;;
   max_cache_age: "1 hour"
 }
 
 persist_with: amy_s_bq_sandbox_default_datagroup
 
-# Explores allow you to join together different views (database tables) based on the
-# relationships between fields. By joining a view into an Explore, you make those
-# fields available to users for data analysis.
-# Explores should be purpose-built for specific use cases.
-
-# To see the Explore you’re building, navigate to the Explore menu and select an Explore under "Amy S Bq Sandbox"
-
-# To create more sophisticated Explores that involve multiple views, you can use the join parameter.
-# Typically, join parameters require that you define the join type, join relationship, and a sql_on clause.
-# Each joined view also needs to define a primary key.
 
 explore: distribution_centers {}
 
@@ -120,7 +110,65 @@ explore: order_items {
 #   }
 # }
 
-explore: users {}
+explore: users {
+  join: order_items {
+    type: left_outer
+    sql_on: ${users.id} = ${order_items.user_id} ;;
+    relationship: one_to_many
+  }
+}
+
+explore: users_2 {
+  label: "Users - Cure for one to many blues"
+  view_name:  users
+  join: user_join_path {
+    fields: []
+    type: left_outer
+    relationship: one_to_one
+    sql_on: 0=1
+      {% if order_items._in_query %} OR ${user_join_path.path} = 'order_items' {% endif %}
+    ;;
+  }
+  join: order_items {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${user_join_path.path} = 'order_items' and ${users.id} = ${order_items.user_id} ;;
+  }
+}
+
+explore: events_and_order_items {}
+
+
+explore: events_2 {
+  view_name: events
+  join: order_items {
+    sql_on: ${events.user_id} = ${order_items.user_id} ;;
+    relationship: many_to_many
+  }
+}
+
+explore: events_3 {
+  view_name: events
+  join: events_join_path {
+    fields: []
+    type: left_outer
+    relationship: one_to_one
+    sql_on: 0=1
+      {% if order_items._in_query %} OR ${events_join_path.path} = 'order_items' {% endif %}
+    ;;
+  }
+  join: order_items {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${events_join_path.path} = 'order_items' and ${events.user_id} = ${order_items.user_id} ;;
+  }
+}
+
+
+# explore: user_order_items {
+#   label: "Users - Outer Join on False"
+# }
+
 
 explore: products {
   join: distribution_centers {
@@ -135,5 +183,21 @@ explore: events {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;
     relationship: many_to_one
+  }
+}
+
+# Place in `amy_s_bq_sandbox` model
+explore: +events {
+  aggregate_table: rollup__created_date {
+    query: {
+      dimensions: [created_date]
+      measures: [users.user_count]
+      filters: [events.created_date: "8 weeks"]
+      timezone: "America/Los_Angeles"
+    }
+
+    materialization: {
+      datagroup_trigger: amy_s_bq_sandbox_default_datagroup
+    }
   }
 }

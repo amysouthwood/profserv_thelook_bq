@@ -34,6 +34,7 @@ view: users {
     sql: ${TABLE}.country ;;
   }
 
+
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
   # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
@@ -101,8 +102,15 @@ view: users {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: count {
+    hidden: yes
     type: count
     drill_fields: [id, last_name, first_name, order_items.count, events.count]
+  }
+
+  measure: user_count {
+    type: count_distinct
+    allow_approximate_optimization: yes
+    sql: ${id} ;;
   }
 
   # These sum and average measures are hidden by default.
@@ -110,37 +118,32 @@ view: users {
 
   measure: total_age {
     type: sum
-    hidden: yes
     sql: ${age} ;;
   }
 
   measure: average_age {
     type: average
-    hidden: yes
     sql: ${age} ;;
+    value_format_name: decimal_1
   }
 
   measure: total_latitude {
     type: sum
-    hidden: yes
     sql: ${latitude} ;;
   }
 
   measure: average_latitude {
     type: average
-    hidden: yes
     sql: ${latitude} ;;
   }
 
   measure: total_longitude {
     type: sum
-    hidden: yes
     sql: ${longitude} ;;
   }
 
   measure: average_longitude {
     type: average
-    hidden: yes
     sql: ${longitude} ;;
   }
 }
