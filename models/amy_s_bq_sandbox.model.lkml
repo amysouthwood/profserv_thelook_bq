@@ -1,10 +1,11 @@
 
-# adding a comment v14
+# adding a comment v15
 # Define the database connection to be used for this model.
 connection: "thelook_bq"
 
 # include all the views
 include: "/views/**/*.view"
+include: "/explores/*.explore.lkml"
 
 # Datagroups define a caching policy for an Explore. To learn more,
 # use the Quick Help panel on the right to see documentation.
@@ -193,6 +194,25 @@ explore: +events {
       dimensions: [created_date]
       measures: [users.user_count]
       filters: [events.created_date: "8 weeks"]
+      timezone: "America/Los_Angeles"
+    }
+
+    materialization: {
+      datagroup_trigger: amy_s_bq_sandbox_default_datagroup
+    }
+  }
+}
+
+# Place in `amy_s_bq_sandbox` model
+explore: +events {
+  aggregate_table: rollup__created_date__users_id {
+    query: {
+      dimensions: [created_date]
+      measures: [users.user_count]
+      filters: [
+        events.created_date: "8 weeks",
+        users.city: "Abbeville"
+      ]
       timezone: "America/Los_Angeles"
     }
 
