@@ -1,13 +1,11 @@
-include: "/models/amy_s_bq_sandbox.model.lkml"
-
-test: order_id_is_unique {
-  explore_source: orders {
+test: order_item_id_is_unique {
+  explore_source: order_items {
     column: id {}
     column: count {}
-    sorts: [orders.count: desc]
+    sorts: [order_items.count: desc]
     limit: 1
   }
-  assert: order_id_is_unique {
-    expression: ${orders.count} = 1 ;;
+  assert: order_item_id_is_unique {
+    expression: ${order_items.count} = 1 ;;
   }
 }
