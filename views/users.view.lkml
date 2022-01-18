@@ -53,6 +53,7 @@ view: users {
   }
 
   dimension: email {
+    hidden: yes
     type: string
     sql: ${TABLE}.email ;;
   }
