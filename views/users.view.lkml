@@ -59,6 +59,7 @@ view: users {
   }
 
   dimension: first_name {
+    hidden: yes
     type: string
     sql: ${TABLE}.first_name ;;
   }
