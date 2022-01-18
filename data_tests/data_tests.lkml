@@ -1,3 +1,5 @@
+include: "/models/amy_s_bq_sandbox.model.lkml"
+
 test: order_id_is_unique {
   explore_source: orders {
     column: id {}
