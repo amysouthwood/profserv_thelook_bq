@@ -1,5 +1,5 @@
-- dashboard: test2
-  title: test2
+- dashboard: amys_lookml_dash
+  title: amys_lookml_dash
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
