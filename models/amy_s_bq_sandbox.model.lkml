@@ -15,7 +15,7 @@ include: "/dashboards/amys_lookml_dash.dashboard.lookml"
 
 datagroup: amy_s_bq_sandbox_default_datagroup {
   sql_trigger: select max(created_at) from `looker-private-demo.thelook.order_items` ;;
-  max_cache_age: "1 hour"
+  max_cache_age: "8 hour"
 }
 
 persist_with: amy_s_bq_sandbox_default_datagroup

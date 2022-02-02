@@ -1,5 +1,6 @@
 view: user_order_items {
   derived_table: {
+    datagroup_trigger: amy_s_bq_sandbox_default_datagroup
     sql: SELECT
               --  associated_users.age,
               --  associated_users.city,
