@@ -3,8 +3,8 @@
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - title: tile
-    name: tile
+  - title: tile2
+    name: tile2
     model: amy_s_bq_sandbox
     explore: order_items
     type: looker_column
